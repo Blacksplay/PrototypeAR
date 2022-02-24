@@ -31,11 +31,24 @@ namespace ARLocation.Utils
 #if !ARGPS_USE_VUFORIA
         public static void RequestPlaneDetectionMode(ARPlaneManager manager, PlaneDetectionMode mode)
         {
-#if UNITY_2019_4_OR_NEWER
-            manager.requestedDetectionMode = mode;
-#else
-            manager.detectionMode = mode;
-#endif
+            var managerType = manager.GetType();
+            var requestedDetectionModeProp = managerType.GetProperty("requestedDetectionMode");
+            if (requestedDetectionModeProp != null)
+            {
+                requestedDetectionModeProp.SetValue(manager, mode);
+            }
+            else
+            {
+                var detectionModeProp = managerType.GetProperty("detectionMode");
+                if (detectionModeProp != null)
+                {
+                    detectionModeProp.SetValue(manager, mode);
+                }
+                else
+                {
+                    throw new System.Exception("[ARGPS][RequestPlaneDetectionMode]: Failed to set detection mode!");
+                }
+            }
         }
 #endif
 

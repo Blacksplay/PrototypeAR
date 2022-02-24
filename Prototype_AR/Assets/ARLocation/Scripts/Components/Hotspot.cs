@@ -15,7 +15,13 @@ namespace ARLocation
         public class OnHotspotActivatedUnityEvent : UnityEvent<GameObject> { }
 
         [Serializable]
+        public class OnHotspotActivatedWithIdUnityEvent : UnityEvent<GameObject, int> { }
+
+        [Serializable]
         public class OnHotspotLeaveUnityEvent : UnityEvent<GameObject> { }
+
+        [Serializable]
+        public class OnHotspotLeaveWithIdUnityEvent : UnityEvent<GameObject, int> { }
 
         [Serializable]
         public enum PositionModes
@@ -44,6 +50,12 @@ namespace ARLocation
 
             [Tooltip("If true, use raw GPS data, instead of the filtered GPS data.")]
             public bool UseRawLocation = true;
+
+            [Tooltip("If true, deactivate the hotspot when leaving the radius after entering it. After deactivattion, the hotspot will be available for activation againg when re-entering the radius.")]
+            public bool DeactivateOnLeave = false;
+
+            [Tooltip("An optional integer ID which is passed to the \"On Hotspot Activated With Id\" and \"On Hotspot Leave With Id\" events.")]
+            [HideInInspector] public int Id = 0;
         }
 
         [Serializable]
@@ -76,6 +88,12 @@ namespace ARLocation
 
         [Tooltip("This event will be emited only once, when the user leaves the hotspot area after it is activated.")]
         public OnHotspotLeaveUnityEvent OnHotspotLeave = new OnHotspotLeaveUnityEvent();
+
+        [Tooltip("This event will be emited only once, when the user leaves the hotspot area after it is activated.")]
+        [HideInInspector] public OnHotspotLeaveWithIdUnityEvent OnHotspotLeaveWithId = new OnHotspotLeaveWithIdUnityEvent();
+
+        [Tooltip("Event for the Hotspot is activated.")]
+        [HideInInspector] public OnHotspotActivatedWithIdUnityEvent OnHotspotActivatedWithId = new OnHotspotActivatedWithIdUnityEvent();
 
         private readonly StateData state = new StateData();
 
@@ -241,10 +259,9 @@ namespace ARLocation
             Logger.LogFromMethod("Hotspot", "ActivateHotspot", $"({name}): Hotspot activated", DebugMode);
 
             OnHotspotActivated?.Invoke(state.Instance);
+            OnHotspotActivatedWithId?.Invoke(state.Instance, HotspotSettings.Id);
         }
 
-        // ReSharper disable once UnusedMethodReturnValue.Global
-        // ReSharper disable once MemberCanBePrivate.Global
         public static Hotspot AddHotspotComponent(GameObject go, Location location, HotspotSettingsData settings)
         {
             var hotspot = go.AddComponent<Hotspot>();
@@ -254,7 +271,13 @@ namespace ARLocation
             return hotspot;
         }
 
-        // ReSharper disable once UnusedMember.Global
+        public static Hotspot AddHotspotComponent(GameObject go, Location location, HotspotSettingsData settings, int id = 0)
+        {
+            settings.Id = id;
+            return AddHotspotComponent(go, location, settings);
+        }
+
+
         public static GameObject CreateHotspotGameObject(Location location, HotspotSettingsData settings,
             string name = "GPS Hotspot")
         {
@@ -265,6 +288,13 @@ namespace ARLocation
             return go;
         }
 
+        public static GameObject CreateHotspotGameObject(Location location, HotspotSettingsData settings,
+            string name = "GPS Hotspot", int id = 0)
+        {
+            settings.Id = id;
+            return CreateHotspotGameObject(location, settings, name);
+        }
+
         void Update()
         {
             if (UseOnLeaveHotspotEvent && state.Activated && !state.EmittedLeaveHotspotEvent)
@@ -273,7 +303,13 @@ namespace ARLocation
                 if (distance >= HotspotSettings.ActivationRadius)
                 {
                     OnHotspotLeave?.Invoke(state.Instance);
+                    OnHotspotLeaveWithId?.Invoke(state.Instance, HotspotSettings.Id);
                     state.EmittedLeaveHotspotEvent = true;
+
+                    if (HotspotSettings.DeactivateOnLeave)
+                    {
+                        Restart();
+                    }
                 }
             }
         }

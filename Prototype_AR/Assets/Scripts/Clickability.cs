@@ -10,17 +10,16 @@ public class Clickability : MonoBehaviour
     private Camera arCamera;
 
     [SerializeField]
-    private ClickedObject[] clickedObjects;
-
-    [SerializeField]
-    public Text Boxtext;
+    public GameObject Origin;
 
     [SerializeField]
     public GameObject panel;
 
+    private ClickedObject clickedObject;
+
     private Vector2 touchposition = default;
 
-        public void deactivatePanel()
+    public void deactivatePanel()
     { 
         for (int i = 0; i < panel.transform.childCount; i++)
         {
@@ -42,11 +41,6 @@ public class Clickability : MonoBehaviour
         panel.SetActive(true);
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -63,11 +57,11 @@ public class Clickability : MonoBehaviour
                 RaycastHit hitObj;
                 if(Physics.Raycast(ray,out hitObj))
                 {
-                    ClickedObject clickedObject = hitObj.transform.GetComponent<ClickedObject>();
+                    clickedObject = hitObj.transform.GetComponent<ClickedObject>();
                     if(clickedObject != null)
                     {
                         panel.SetActive(true);
-                        Boxtext.text = clickedObject.ObjName + " Clicked";
+                        Origin.GetComponent<ClickedScreen>().clickedObject= clickedObject;
                     }
                 }
             }

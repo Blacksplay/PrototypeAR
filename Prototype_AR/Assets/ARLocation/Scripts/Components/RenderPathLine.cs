@@ -12,7 +12,9 @@ namespace ARLocation
     {
         public MoveAlongPath.PathSettingsData PathSettings;
         public MoveAlongPath.PlacementSettingsData PlacementSettings;
-        private Transform arLocationRoot;
+
+        [HideInInspector] public Transform arLocationRoot;
+        [HideInInspector] public MoveAlongPath moveAlongPath;
 
         public void Start()
         {
@@ -32,9 +34,17 @@ namespace ARLocation
 
             var pathGameObject = new GameObject($"{gameObject.name} - RenderPathLine");
 
-            var moveAlongPath = pathGameObject.AddComponent<MoveAlongPath>();
+            moveAlongPath = pathGameObject.AddComponent<MoveAlongPath>();
             moveAlongPath.PathSettings = PathSettings;
             moveAlongPath.PlacementSettings = PlacementSettings;
+        }
+
+        public void SetLocationPath(LocationPath path)
+        {
+            if (moveAlongPath != null)
+            {
+                moveAlongPath.SetLocationPath(path);
+            }
         }
     }
 }
