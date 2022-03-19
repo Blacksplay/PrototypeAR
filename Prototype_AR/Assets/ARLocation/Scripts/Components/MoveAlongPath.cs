@@ -123,7 +123,8 @@ namespace ARLocation
         private bool HeightGroundRelative => PlacementSettings.AltitudeMode == AltitudeMode.GroundRelative;
 
         /// <summary>
-        /// Change the `LocationPath` the GameObject will traverse.
+        /// Change the `LocationPath` the GameObject will traverse. This will
+        /// have the effect of reseting the movement to the start of the path.
         /// </summary>
         /// <param name="path"></param>
         public void SetLocationPath(LocationPath path)
@@ -132,7 +133,7 @@ namespace ARLocation
 
             state.PointCount = PathSettings.LocationPath.Locations.Length;
             state.Points = new Vector3[state.PointCount];
-
+            u = 0;
 
             BuildSpline(locationProvider.CurrentLocation.ToLocation());
         }

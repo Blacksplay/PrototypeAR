@@ -1,3 +1,11 @@
+# 3.7.1
+- Added: `RenderPathLine.SetLocationPath` method.
+- Fixed: Route path renderer not working
+
+# 3.7.0
+- Added `DeactivateOnLeave` property to reset the hotspot on leave.
+- Fixed error with `ARPlaneManager.requestedDetectionMode` in Unity 2019.4.
+
 # 3.6.1
 - Fixed "GameObject -> AR+GPS -> Mapbox Route" game object context menu item not setting the on-screen indicator arrow sprite.
 - Fixed "GameObject -> AR+GPS -> Mapbox Route" game object context menu item not setting the path route renderere "Line Material".

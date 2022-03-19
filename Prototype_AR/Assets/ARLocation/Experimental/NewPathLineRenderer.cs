@@ -25,13 +25,14 @@ namespace ARLocation
             lineRenderer = renderer;
 
             arLocationRoot = ARLocationManager.Instance.gameObject.transform;
-            //lineRenderer.gameObject.transform.SetParent(arLocationRoot);
 
             initialized = true;
 
             locationProvider = ARLocationProvider.Instance;
-            //locationProvider.OnLocationUpdated.AddListener(locationUpdatedHandler);
             locationProvider.OnLocationUpdatedDelegate += locationUpdatedHandler;
+            if (locationProvider.IsEnabled) {
+                locationUpdatedHandler(locationProvider.CurrentLocation, locationProvider.CurrentLocation);
+            }
         }
 
         private void locationUpdatedHandler(LocationReading locationReading, LocationReading _)
