@@ -4,14 +4,11 @@ using UnityEngine;
 
 public class Feed : MonoBehaviour
 {
-    public ClickedObject clickedObject;
-
-    private float count;
+    [SerializeField]
+    public ClickedObject hungryGuy;
 
     public void FeedObject()
     {
-        count = clickedObject.Health;
-        count += 10;
-        clickedObject.Health = count;
+        hungryGuy.Health += 10;
     }
 }

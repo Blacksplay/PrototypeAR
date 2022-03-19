@@ -20,6 +20,10 @@ public class ClickedScreen : MonoBehaviour
     [SerializeField]
     public Image Herz;
 
+    public Sprite Herz_Rot;
+    public Sprite Herz_Gelb;
+    public Sprite Herz_Gruen;
+
     // Update is called once per frame
     void Update()
     {
@@ -27,21 +31,21 @@ public class ClickedScreen : MonoBehaviour
 
         if (clickedObject.Health< 25)
         { 
-            Herz.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/Herz_Spritesheet_0");
+            Herz.GetComponent<Image>().sprite = Herz_Rot;
         }
         if (clickedObject.Health < 75 && clickedObject.Health > 25)
         {
-            Herz.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/Herz_Spritesheet_1");
+            Herz.GetComponent<Image>().sprite = Herz_Gelb;
         }
         if (clickedObject.Health > 75)
         {
-            Herz.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/Herz_Spritesheet_2");
+            Herz.GetComponent<Image>().sprite = Herz_Gruen;
         }
 
-        if (FeedButton.GetComponent<Feed>().clickedObject != clickedObject)
+        if (FeedButton.GetComponent<Feed>().hungryGuy != clickedObject)
         {
             Boxtext.text = clickedObject.ObjName;
-            FeedButton.GetComponent<ClickedScreen>().clickedObject = clickedObject;
+            FeedButton.GetComponent<Feed>().hungryGuy = clickedObject;
         }
     }
 }

@@ -7,13 +7,13 @@ public class ClickedObject : MonoBehaviour
     [SerializeField]
     public string ObjName;
 
-    public float Health;
+    public double Health;
 
     public int ID;
 
     public bool hungry = true;
 
-    public float changeovertime = 1;
+    public double changeovertime = 1;
 
     void Update()
     {
@@ -37,6 +37,6 @@ public class ClickedObject : MonoBehaviour
     private void hunger()
     {
 
-        Health -= changeovertime * Time.deltaTime; 
+        Health -= changeovertime * Time.deltaTime;
     }
 }
