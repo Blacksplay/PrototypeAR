@@ -259,5 +259,15 @@ namespace ARLocation
         {
             return Location.GetLocationForWorldPosition(gameObject.transform, cameraPositionAtLastUpdate, arLocationProvider.CurrentLocation.ToLocation(), position);
         }
+
+        /// <summary>
+        /// Returns the worl-position for a given geographical location.
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        public Vector3 GetWorldPositionForLocation(Location location, bool heightRelative = true)
+        {
+            return Location.GetGameObjectPositionForLocation(gameObject.transform, cameraPositionAtLastUpdate, arLocationProvider.CurrentLocation.ToLocation(), location, heightRelative);
+        }
     }
 }

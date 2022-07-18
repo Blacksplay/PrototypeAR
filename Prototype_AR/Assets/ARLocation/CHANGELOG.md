@@ -1,3 +1,7 @@
+# 3.8.0
+- Added `ARLocationManager.GetGameObjectPositionForLocation` method.
+- Fixed locale issue with mapbox requests.
+
 # 3.7.1
 - Added: `RenderPathLine.SetLocationPath` method.
 - Fixed: Route path renderer not working
